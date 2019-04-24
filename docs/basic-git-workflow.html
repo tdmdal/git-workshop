@@ -311,12 +311,13 @@ $(document).ready(function () {
 <li>create a new local Git repo (<code>git init</code>).</li>
 <li>create and edit files in the repo.</li>
 <li>snapshot files in preparation for versioning, i.e., stage files to the staging area (<code>git add</code>).</li>
-<li>record file snapshots in version history, i.e., commit the changes (<code>git commit</code>).</li>
+<li>record file snapshots in version history, i.e., commit the staged changes (<code>git commit</code>).</li>
 <li>go back to 2 and repeat.</li>
 </ol>
+<p>Along the above “cycle”, you will also learn a few other things.</p>
 <ul>
 <li>configure git for first-time use (<code>git configure</code>).</li>
-<li>list new or modified files to be commmitted (<code>git status</code>).</li>
+<li>list new or modified files to be committed (<code>git status</code>).</li>
 <li>show file differences (<code>git diff</code>)</li>
 <li><p>list version history (<code>git log</code>)</p></li>
 <li><p>push local repo to GitHub (<code>git remote</code>, <code>git push</code>)</p></li>
@@ -325,9 +326,10 @@ $(document).ready(function () {
 <p>Now, let’s get started by checking what version of git we have.</p>
 <pre class="bash"><code>$ git --version
 git version 2.7.4</code></pre>
-<p>First-time Git configuration. I’ll configure at global/user level (hence the <code>--global</code> option), which means the setup applies to all my projects, but other users with different login accounts won’t have the setup.</p>
+<p>If it’s the first time you use Git, you will need to configure a few things. At minimum, you should tell git your name and email address.</p>
 <pre class="bash"><code>git config --global user.name &quot;John Doe&quot;
 git config --global user.email &quot;jdoe@example.com&quot;</code></pre>
+<p>I configured my git at global/user level (hence the <code>--global</code> option). This means the setup applies to all my projects. Other users with different login accounts won’t have my setup.</p>
 <p>Display the configuration.</p>
 <pre class="bash"><code>$ git config --global --list
 user.name=John Doe
@@ -341,7 +343,7 @@ user.email=jdoe@example.com</code></pre>
 <pre class="bash"><code>$ cd gitworkshop</code></pre>
 <p>Create a new local Git project.</p>
 <pre class="bash"><code>$ git init</code></pre>
-<p>The above command creates a hidden directory <code>.git</code>, where Git keeps all the version control information for this project. Let’s use <code>tree .git</code> to list all files in the <code>.git</code> directory in a tree-like format.</p>
+<p>The above command creates a hidden directory <code>.git</code>. This is where Git keeps all the version control information for this project. Let’s use <code>tree .git</code> to list all files in the <code>.git</code> directory in a tree-like format.</p>
 <pre class="bash"><code>$ tree .git
 .git
 ├── branches
@@ -366,13 +368,13 @@ user.email=jdoe@example.com</code></pre>
 └── refs
     ├── heads
     └── tags</code></pre>
-<p>A lot of things are already in the <code>.git</code> directory. More will be added along the way we version control our project. Let’s just keep in mind that this is how Git’s internal data structure looks like and don’t worry about the details for now.</p>
-<p>Creat a new file <code>notes.txt</code>, and add a line <code>line 1: git is cool.</code> to it. I’ll use a text editor called <code>nano</code>. You can use your favorite text editor.</p>
+<p>A lot of things are already in the <code>.git</code> directory. More will be added along the way we version control our project. Let’s just note that this is where Git keeps its internal data and don’t worry about the details for now.</p>
+<p>Create a new file <code>notes.txt</code>, and add a line <code>line 1: git is cool.</code> to it. I’ll use a text editor called <code>nano</code>. You can use your own favorite text editor.</p>
 <pre class="bash"><code>$ nano notes.txt</code></pre>
 <p>Check the content of the <code>notes.txt</code> file (<code>cat [file]</code>).</p>
 <pre class="bash"><code>$ cat notes.txt
 line1: git is cool.</code></pre>
-<p><code>git status</code> lists all new or modified files to be committed for version control. If we run this command now, it will tell us that the newly created file is not tracked.</p>
+<p><code>git status</code> lists all new or modified files to be committed for version control. If we run this command now, it will tell us that the newly created file <code>note.txt</code> is not tracked yet.</p>
 <pre class="bash"><code>$ git status
 On branch master
 
@@ -384,7 +386,7 @@ Untracked files:
         notes.txt
 
 nothing added to commit but untracked files present (use &quot;git add&quot; to track)</code></pre>
-<p>The <code>git status</code> output also shows that we are “On branch master”. This means we are working on the “master” version history line. The word “master” is a reference name. (Git allows you to create branches and work on different branch lines. We won’t discuss braching in this handout.)</p>
+<p>The <code>git status</code> output also shows that we are “On branch master”. This means we are working on the “master” version history line. “master” is a branch reference name. (Git allows you to create new branches and work on different branch lines. We won’t discuss branching in this handout.)</p>
 <p>Now, let’s stage all untracked files using the <code>git add .</code> command. The <code>.</code> here tells Git to stage all files in the current directory and sub-directories. Staging is the process of preparing files for version control.</p>
 <pre class="bash"><code>git add .</code></pre>
 <p>Now, <code>git status</code> will tell you that the <code>notes.txt</code> file is ready to be committed.</p>
@@ -413,13 +415,13 @@ Author: John Doe &lt;jdoe@example.com&gt;
 Date:   Mon Apr 22 17:45:07 2019 -0400
 
     initial commit</code></pre>
-<p>The long string starting with <code>cff7a</code> is the commit id that uniquely identifies a commit.</p>
+<p>The <code>git log</code> output shows you who and when the commit is done. The long string starting with <code>cff7a</code> is the commit id that uniquely identifies the commit.</p>
 <p>Now, add a new line <code>line2: git is fun.</code> to the notes.txt file.</p>
 <pre class="bash"><code>$ nano notes.txt
 $ cat notes.txt
 line1: git is cool.
 line2: git is fun.</code></pre>
-<p>Check <code>git status</code> again. We see that Git knows the file has been modified, it’s not staged yet.</p>
+<p>Check <code>git status</code> again. We see that Git knows the file has been modified, but it’s not staged yet.</p>
 <pre class="bash"><code>$ git status
 On branch master
 Changes not staged for commit:
@@ -485,18 +487,18 @@ Author: John Doe &lt;jdoe@example.com&gt;
 Date:   Mon Apr 22 17:45:07 2019 -0400
 
     initial commit</code></pre>
-<p>Now, let’s create a GitHub repo <code>gitworkshop</code> and push our project to GitHub (see GitHub <a href="https://help.github.com/en/articles/create-a-repo">Create a Repo</a> for detailed instructions). The repo on GitHub is called remote repo. After creating it, we need to add it’s information (path) to our local repo.</p>
+<p>Now, let’s create a GitHub repo <code>gitworkshop</code> and push our project to GitHub (see GitHub <a href="https://help.github.com/en/articles/create-a-repo">Create a Repo</a> for detailed instructions). The repo on GitHub is called remote repo. After creating it, we need to add its information (path) to our local repo.</p>
 <pre class="bash"><code>$ git remote add origin https://github.com/jdoe/gitworkshop.git</code></pre>
-<p><code>origin</code> is the name of the remote repo. You can give it any name, but by convention, people use “origin” for a project’s first remote repo (you can have mulitple remote repos for a project). <code>https://github.com/jdoe/gitworkshop.git</code> is the path to remote repo. Within the path, <code>jdoe</code> is the GitHub username. <code>gitworkshop.git</code> is the remote repo on GitHub.</p>
+<p><code>origin</code> is the name of the remote repo. You can give it any name, but by convention, people use “origin” for a project’s first remote repo (you can have multiple remote repos for a project). <code>https://github.com/jdoe/gitworkshop.git</code> is the path to remote repo. Within the path, <code>jdoe</code> is the GitHub username. <code>gitworkshop.git</code> is the remote repo on GitHub.</p>
 <p>We are ready to push the local repo to remote.</p>
 <pre class="bash"><code>$ git push -u origin master</code></pre>
-<p>This pushes your master branch (“your master history line”) to the remote <code>origin</code>. <code>-u</code> adds a upstream tracking reference. Next time (when you are on master branch), you only need to type <code>git push</code> to push new version history to the remote repo. Git knnow it must be the origin/master you are pushing to.</p>
+<p>This pushes your master branch (“your master history line”) to the remote repo <code>origin</code>. The <code>-u</code> option adds a upstream tracking reference. Next time (when you are on master branch), you only need to type <code>git push</code> to push new version history to the remote repo. Git knows it must be the origin/master you are pushing to.</p>
 <p>Let’s check the version history again. This time we’ll use <code>--oneline</code> option to make the output concise, and <code>--decorate</code> option to print out reference names.</p>
 <pre class="bash"><code>$ git log --oneline --decorate
 7c0b164 (HEAD -&gt; master, origin/master) created handout.txt
 de81fb9 added line 2 to notes.txt
 cff7ab5 initial commit</code></pre>
-<p>We can see we have three commits so far. We are currently (<code>HEAD</code>) at our last commit (ID starting with <code>7c0b164</code>) on the “master” history line (<code>master</code> branch). This is also where our remote repo’s “master” branch (<code>origin/master</code>) is.</p>
+<p>We can see we have three commits so far. We are currently (<code>HEAD</code>) at our last commit (ID starting with <code>7c0b164</code>) on the “master” history line (<code>master</code> branch). This is also where our remote repo’s master branch (<code>origin/master</code>) is.</p>
 
 
 

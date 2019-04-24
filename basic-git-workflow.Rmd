@@ -11,11 +11,13 @@ This hands-on exercise walks you through a simple Git workflow.
 1. create a new local Git repo (`git init`).
 2. create and edit files in the repo.
 3. snapshot files in preparation for versioning, i.e., stage files to the staging area (`git add`).
-4. record file snapshots in version history, i.e., commit the changes (`git commit`).
+4. record file snapshots in version history, i.e., commit the staged changes (`git commit`).
 5. go back to 2 and repeat.
 
+Along the above "cycle", you will also learn a few other things.
+
 * configure git for first-time use (`git configure`).
-* list new or modified files to be commmitted (`git status`).
+* list new or modified files to be committed (`git status`).
 * show file differences (`git diff`)
 * list version history (`git log`)
 
@@ -30,12 +32,14 @@ $ git --version
 git version 2.7.4
 ```
 
-First-time Git configuration. I'll configure at global/user level (hence the `--global` option), which means the setup applies to all my projects, but other users with different login accounts won't have the setup.
+If it's the first time you use Git, you will need to configure a few things. At minimum, you should tell git your name and email address.
 
 ```{bash}
 git config --global user.name "John Doe"
 git config --global user.email "jdoe@example.com"
 ```
+
+I configured my git at global/user level (hence the `--global` option). This means the setup applies to all my projects. Other users with different login accounts won't have my setup.
 
 Display the configuration.
 
@@ -69,7 +73,7 @@ Create a new local Git project.
 $ git init
 ```
 
-The above command creates a hidden directory `.git`, where Git keeps all the version control information for this project. Let's use `tree .git` to list all files in the `.git` directory in a tree-like format.
+The above command creates a hidden directory `.git`. This is where Git keeps all the version control information for this project. Let's use `tree .git` to list all files in the `.git` directory in a tree-like format.
 
 ```{bash}
 $ tree .git
@@ -98,9 +102,9 @@ $ tree .git
     └── tags
 ```
 
-A lot of things are already in the `.git` directory. More will be added along the way we version control our project. Let's just keep in mind that this is how Git's internal data structure looks like and don't worry about the details for now.
+A lot of things are already in the `.git` directory. More will be added along the way we version control our project. Let's just note that this is where Git keeps its internal data and don't worry about the details for now.
 
-Creat a new file `notes.txt`, and add a line `line 1: git is cool.` to it. I'll use a text editor called `nano`. You can use your favorite text editor.
+Create a new file `notes.txt`, and add a line `line 1: git is cool.` to it. I'll use a text editor called `nano`. You can use your own favorite text editor.
 
 ```{bash}
 $ nano notes.txt
@@ -112,7 +116,7 @@ $ cat notes.txt
 line1: git is cool.
 ```
 
-`git status` lists all new or modified files to be committed for version control. If we run this command now, it will tell us that the newly created file is not tracked.
+`git status` lists all new or modified files to be committed for version control. If we run this command now, it will tell us that the newly created file `note.txt` is not tracked yet.
 
 ```{bash}
 $ git status
@@ -128,7 +132,7 @@ Untracked files:
 nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-The `git status` output also shows that we are "On branch master". This means we are working on the "master" version history line. The word "master" is a reference name. (Git allows you to create branches and work on different branch lines. We won't discuss braching in this handout.)   
+The `git status` output also shows that we are "On branch master". This means we are working on the "master" version history line. "master" is a branch reference name. (Git allows you to create new branches and work on different branch lines. We won't discuss branching in this handout.)   
 
 Now, let's stage all untracked files using the `git add .` command. The `.` here tells Git to stage all files in the current directory and sub-directories. Staging is the process of preparing files for version control.
 
@@ -178,7 +182,7 @@ Date:   Mon Apr 22 17:45:07 2019 -0400
     initial commit
 ```
 
-The long string starting with `cff7a` is the commit id that uniquely identifies a commit.
+The `git log` output shows you who and when the commit is done. The long string starting with `cff7a` is the commit id that uniquely identifies the commit. 
 
 Now, add a new line `line2: git is fun.` to the notes.txt file.
 
@@ -189,7 +193,7 @@ line1: git is cool.
 line2: git is fun.
 ```
 
-Check `git status` again. We see that Git knows the file has been modified, it's not staged yet.
+Check `git status` again. We see that Git knows the file has been modified, but it's not staged yet.
 
 ```{bash}
 $ git status
@@ -283,13 +287,13 @@ Date:   Mon Apr 22 17:45:07 2019 -0400
     initial commit
 ```
 
-Now, let's create a GitHub repo `gitworkshop` and push our project to GitHub (see GitHub [Create a Repo](https://help.github.com/en/articles/create-a-repo) for detailed instructions). The repo on GitHub is called remote repo. After creating it, we need to add it's information (path) to our local repo.
+Now, let's create a GitHub repo `gitworkshop` and push our project to GitHub (see GitHub [Create a Repo](https://help.github.com/en/articles/create-a-repo) for detailed instructions). The repo on GitHub is called remote repo. After creating it, we need to add its information (path) to our local repo.
 
 ```{bash}
 $ git remote add origin https://github.com/jdoe/gitworkshop.git
 ```
 
-`origin` is the name of the remote repo. You can give it any name, but by convention, people use "origin" for a project's first remote repo (you can have mulitple remote repos for a project). `https://github.com/jdoe/gitworkshop.git` is the path to remote repo. Within the path, `jdoe` is the GitHub username. `gitworkshop.git` is the remote repo on GitHub.
+`origin` is the name of the remote repo. You can give it any name, but by convention, people use "origin" for a project's first remote repo (you can have multiple remote repos for a project). `https://github.com/jdoe/gitworkshop.git` is the path to remote repo. Within the path, `jdoe` is the GitHub username. `gitworkshop.git` is the remote repo on GitHub.
 
 We are ready to push the local repo to remote.
 
@@ -297,7 +301,7 @@ We are ready to push the local repo to remote.
 $ git push -u origin master
 ```
 
-This pushes your master branch ("your master history line") to the remote `origin`. `-u` adds a upstream tracking reference. Next time (when you are on master branch), you only need to type `git push` to push new version history to the remote repo. Git knnow it must be the origin/master you are pushing to.
+This pushes your master branch ("your master history line") to the remote repo `origin`. The `-u` option adds a upstream tracking reference. Next time (when you are on master branch), you only need to type `git push` to push new version history to the remote repo. Git knows it must be the origin/master you are pushing to.
 
 Let's check the version history again. This time we'll use `--oneline` option to make the output concise, and `--decorate` option to print out reference names.
 
@@ -308,4 +312,4 @@ de81fb9 added line 2 to notes.txt
 cff7ab5 initial commit
 ```
 
-We can see we have three commits so far. We are currently (`HEAD`) at our last commit (ID starting with `7c0b164`) on the "master" history line (`master` branch). This is also where our remote repo's "master" branch (`origin/master`) is.
+We can see we have three commits so far. We are currently (`HEAD`) at our last commit (ID starting with `7c0b164`) on the "master" history line (`master` branch). This is also where our remote repo's master branch (`origin/master`) is.
