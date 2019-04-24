@@ -1,0 +1,17 @@
+name: "TDMDAL Workshop"
+output_dir: "docs"
+include: ["git_intro.pdf"]
+exclude: ["CodeAndData.pdf", "*.pptx"]
+navbar:
+  title: "TDMDAL Workshop - Git & GitHub Intro"
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "Basic Git Workflow"
+      href: basic-git-workflow.html
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+
+  

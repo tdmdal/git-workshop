@@ -1,0 +1,19 @@
+---
+title: "Git & GitHub Intro"
+---
+
+* [Workshop Slides](git_intro.pdf)
+* Hands-on Exercise: [Basic Git Workflow](basic-git-workflow.html)
+* Git online learning resources
+    * [Version Control with Git](http://swcarpentry.github.io/git-novice/) by Software Carpentry
+    * [Git Basics Video Series](https://git-scm.com/videos) 
+    * [Git Essential Training](https://www.lynda.com/Git-tutorials/Git-Essential-Training/100222-2.html) by Kevin Skoglund at lynda.com (login from [here](https://main.its.utoronto.ca/news/free-access-to-lynda-com-online-courses/) for UofT free access)
+    * [Git command cheat sheet](https://education.github.com/git-cheat-sheet-education.pdf) from GitHub
+    * [Getting Started Tutorials](https://www.atlassian.com/git/tutorials/setting-up-a-repository) from Bitbucket Atlassian
+    * [GitHub Guides](https://guides.github.com/)
+    * [Happy Git and GitHub for the useR](https://happygitwithr.com/) by Jenny Bryan
+    * [Git Reference Manual](https://git-scm.com/doc)
+    * The [Pro Git](https://git-scm.com/book/en/v2) book by Scott Chacon and Ben Straub
+    
+    
+Back to [TDMDAL Computing Page](https://tdmdal.github.io/)

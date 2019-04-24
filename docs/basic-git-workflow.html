@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Basic Git Workflow</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">TDMDAL Workshop - Git & GitHub Intro</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="basic-git-workflow.html">Basic Git Workflow</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Basic Git Workflow</h1>
+
+</div>
+
+
+<p>This hands-on exercise walks you through a simple Git workflow.</p>
+<ol style="list-style-type: decimal">
+<li>create a new local Git repo (<code>git init</code>).</li>
+<li>create and edit files in the repo.</li>
+<li>snapshot files in preparation for versioning, i.e., stage files to the staging area (<code>git add</code>).</li>
+<li>record file snapshots in version history, i.e., commit the changes (<code>git commit</code>).</li>
+<li>go back to 2 and repeat.</li>
+</ol>
+<ul>
+<li>configure git for first-time use (<code>git configure</code>).</li>
+<li>list new or modified files to be commmitted (<code>git status</code>).</li>
+<li>show file differences (<code>git diff</code>)</li>
+<li><p>list version history (<code>git log</code>)</p></li>
+<li><p>push local repo to GitHub (<code>git remote</code>, <code>git push</code>)</p></li>
+</ul>
+<p>Note that all Git commands start with <code>git</code>.</p>
+<p>Now, let’s get started by checking what version of git we have.</p>
+<pre class="bash"><code>$ git --version
+git version 2.7.4</code></pre>
+<p>First-time Git configuration. I’ll configure at global/user level (hence the <code>--global</code> option), which means the setup applies to all my projects, but other users with different login accounts won’t have the setup.</p>
+<pre class="bash"><code>git config --global user.name &quot;John Doe&quot;
+git config --global user.email &quot;jdoe@example.com&quot;</code></pre>
+<p>Display the configuration.</p>
+<pre class="bash"><code>$ git config --global --list
+user.name=John Doe
+user.email=jdoe@example.com</code></pre>
+<p>Check the directory I am currently in (<code>pwd</code>: path to working directory). <code>pwd</code> is a Linux command. Windows users can use the <code>cd</code> command to do the same thing.</p>
+<pre class="bash"><code>$ pwd
+/home/jdoe</code></pre>
+<p>Create a new directory <code>gitworkshop</code> in the current directory (<code>mkdir</code>: make directory).</p>
+<pre class="bash"><code>mkdir gitworkshop</code></pre>
+<p>Enter the <code>gitworkshop</code> directory (<code>cd</code>: change directory).</p>
+<pre class="bash"><code>$ cd gitworkshop</code></pre>
+<p>Create a new local Git project.</p>
+<pre class="bash"><code>$ git init</code></pre>
+<p>The above command creates a hidden directory <code>.git</code>, where Git keeps all the version control information for this project. Let’s use <code>tree .git</code> to list all files in the <code>.git</code> directory in a tree-like format.</p>
+<pre class="bash"><code>$ tree .git
+.git
+├── branches
+├── config
+├── description
+├── HEAD
+├── hooks
+│   ├── applypatch-msg.sample
+│   ├── commit-msg.sample
+│   ├── post-update.sample
+│   ├── pre-applypatch.sample
+│   ├── pre-commit.sample
+│   ├── prepare-commit-msg.sample
+│   ├── pre-push.sample
+│   ├── pre-rebase.sample
+│   └── update.sample
+├── info
+│   └── exclude
+├── objects
+│   ├── info
+│   └── pack
+└── refs
+    ├── heads
+    └── tags</code></pre>
+<p>A lot of things are already in the <code>.git</code> directory. More will be added along the way we version control our project. Let’s just keep in mind that this is how Git’s internal data structure looks like and don’t worry about the details for now.</p>
+<p>Creat a new file <code>notes.txt</code>, and add a line <code>line 1: git is cool.</code> to it. I’ll use a text editor called <code>nano</code>. You can use your favorite text editor.</p>
+<pre class="bash"><code>$ nano notes.txt</code></pre>
+<p>Check the content of the <code>notes.txt</code> file (<code>cat [file]</code>).</p>
+<pre class="bash"><code>$ cat notes.txt
+line1: git is cool.</code></pre>
+<p><code>git status</code> lists all new or modified files to be committed for version control. If we run this command now, it will tell us that the newly created file is not tracked.</p>
+<pre class="bash"><code>$ git status
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+
+        notes.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</code></pre>
+<p>The <code>git status</code> output also shows that we are “On branch master”. This means we are working on the “master” version history line. The word “master” is a reference name. (Git allows you to create branches and work on different branch lines. We won’t discuss braching in this handout.)</p>
+<p>Now, let’s stage all untracked files using the <code>git add .</code> command. The <code>.</code> here tells Git to stage all files in the current directory and sub-directories. Staging is the process of preparing files for version control.</p>
+<pre class="bash"><code>git add .</code></pre>
+<p>Now, <code>git status</code> will tell you that the <code>notes.txt</code> file is ready to be committed.</p>
+<pre class="bash"><code>$ git status
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+
+        new file:   notes.txt</code></pre>
+<p>Commit the changes, i.e. record version history.</p>
+<pre class="bash"><code>git commit -m &quot;initial commit&quot;
+[master (root-commit) cff7ab5] initial commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 notes.txt</code></pre>
+<p><code>git status</code> will tell you “nothing to commit” this time.</p>
+<pre class="bash"><code>$ git status
+On branch master
+nothing to commit, working directory clean</code></pre>
+<p>Check the version history so far.</p>
+<pre class="bash"><code>$ git log
+commit cff7ab50f5a9337fb588d584b004f5c8a2e7e39c
+Author: John Doe &lt;jdoe@example.com&gt;
+Date:   Mon Apr 22 17:45:07 2019 -0400
+
+    initial commit</code></pre>
+<p>The long string starting with <code>cff7a</code> is the commit id that uniquely identifies a commit.</p>
+<p>Now, add a new line <code>line2: git is fun.</code> to the notes.txt file.</p>
+<pre class="bash"><code>$ nano notes.txt
+$ cat notes.txt
+line1: git is cool.
+line2: git is fun.</code></pre>
+<p>Check <code>git status</code> again. We see that Git knows the file has been modified, it’s not staged yet.</p>
+<pre class="bash"><code>$ git status
+On branch master
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+
+        modified:   notes.txt</code></pre>
+<p><code>git diff</code> shows differences between tracked files in working directory and those in staging area.</p>
+<pre class="diff"><code>$ git diff
+diff --git a/notes.txt b/notes.txt
+index 0ba590f..a9fc135 100644
+--- a/notes.txt
++++ b/notes.txt
+@@ -1 +1,2 @@
+ line1: git is cool.
++line2: git is fun.</code></pre>
+<p>Create a new file <code>handout.txt</code>, and add a line <code>handout for git intro</code> to it.</p>
+<pre class="bash"><code>$ nano handout.txt
+$ cat handout.txt
+handout for git intro</code></pre>
+<p>This time, <code>git status</code> will show an untracked file <code>handout.txt</code> in addition to the modified tracked file <code>notes.txt</code>.</p>
+<pre class="bash"><code>$ git status
+On branch master
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
+
+        modified:   notes.txt
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+
+        handout.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</code></pre>
+<p>Stage and commit the change in <code>notes.txt</code> first.</p>
+<pre class="bash"><code>$ git add notes.txt
+$ git commit -m &quot;added line 2 to notes.txt&quot;
+[master de81fb9] added line 2 to notes.txt
+ 1 file changed, 1 insertion(+)</code></pre>
+<p>Stage/track the new file <code>handout.txt</code> and commit it.</p>
+<pre class="bash"><code>$ git add handout.txt
+$ git commit -m &quot;created handout.txt&quot;
+[master 7c0b164] created handout.txt
+ 1 file changed, 1 insertion(+)
+ create mode 100644 handout.txt</code></pre>
+<p>Check the commit history so far.</p>
+<pre class="bash"><code>$ git log
+commit 7c0b1647007f408e6f40bde09e8942e6711fbedd
+Author: John Doe &lt;jdoe@example.com&gt;
+Date:   Tue Apr 23 09:38:42 2019 -0400
+
+    created handout.txt
+
+commit de81fb9b9fb014ff71533c0c54af812eb4758c27
+Author: John Doe &lt;jdoe@example.com&gt;
+Date:   Tue Apr 23 09:37:19 2019 -0400
+
+    added line 2 to notes.txt
+
+commit cff7ab50f5a9337fb588d584b004f5c8a2e7e39c
+Author: John Doe &lt;jdoe@example.com&gt;
+Date:   Mon Apr 22 17:45:07 2019 -0400
+
+    initial commit</code></pre>
+<p>Now, let’s create a GitHub repo <code>gitworkshop</code> and push our project to GitHub (see GitHub <a href="https://help.github.com/en/articles/create-a-repo">Create a Repo</a> for detailed instructions). The repo on GitHub is called remote repo. After creating it, we need to add it’s information (path) to our local repo.</p>
+<pre class="bash"><code>$ git remote add origin https://github.com/jdoe/gitworkshop.git</code></pre>
+<p><code>origin</code> is the name of the remote repo. You can give it any name, but by convention, people use “origin” for a project’s first remote repo (you can have mulitple remote repos for a project). <code>https://github.com/jdoe/gitworkshop.git</code> is the path to remote repo. Within the path, <code>jdoe</code> is the GitHub username. <code>gitworkshop.git</code> is the remote repo on GitHub.</p>
+<p>We are ready to push the local repo to remote.</p>
+<pre class="bash"><code>$ git push -u origin master</code></pre>
+<p>This pushes your master branch (“your master history line”) to the remote <code>origin</code>. <code>-u</code> adds a upstream tracking reference. Next time (when you are on master branch), you only need to type <code>git push</code> to push new version history to the remote repo. Git knnow it must be the origin/master you are pushing to.</p>
+<p>Let’s check the version history again. This time we’ll use <code>--oneline</code> option to make the output concise, and <code>--decorate</code> option to print out reference names.</p>
+<pre class="bash"><code>$ git log --oneline --decorate
+7c0b164 (HEAD -&gt; master, origin/master) created handout.txt
+de81fb9 added line 2 to notes.txt
+cff7ab5 initial commit</code></pre>
+<p>We can see we have three commits so far. We are currently (<code>HEAD</code>) at our last commit (ID starting with <code>7c0b164</code>) on the “master” history line (<code>master</code> branch). This is also where our remote repo’s “master” branch (<code>origin/master</code>) is.</p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
