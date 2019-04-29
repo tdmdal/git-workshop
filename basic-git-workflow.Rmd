@@ -245,7 +245,7 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-Stage and commit the change in `notes.txt` first.
+We could stage and commit both changes at the same time. However, suppose the two changes are not related. In this case, it's a good practice to commit the two changes seperately. Stage and commit the change in `notes.txt` first.
 
 ```{bash}
 $ git add notes.txt
