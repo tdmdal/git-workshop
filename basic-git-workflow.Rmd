@@ -163,6 +163,8 @@ git commit -m "initial commit"
  create mode 100644 notes.txt
 ```
 
+The `-m` option allows you to write a commit message.
+
 `git status` will tell you "nothing to commit" this time.
 
 ```{bash}
@@ -245,7 +247,7 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
-We could stage and commit both changes at the same time. However, suppose the two changes are not related. In this case, it's a good practice to commit the two changes seperately. Stage and commit the change in `notes.txt` first.
+We could stage and commit both changes at the same time. However, suppose the two changes are not related. In this case, it's a good practice to commit the two changes separately. Stage and commit the change in `notes.txt` first.
 
 ```{bash}
 $ git add notes.txt

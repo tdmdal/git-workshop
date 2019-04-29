@@ -404,6 +404,7 @@ Changes to be committed:
 [master (root-commit) cff7ab5] initial commit
  1 file changed, 1 insertion(+)
  create mode 100644 notes.txt</code></pre>
+<p>The <code>-m</code> option allows you to write a commit message.</p>
 <p><code>git status</code> will tell you “nothing to commit” this time.</p>
 <pre class="bash"><code>$ git status
 On branch master
@@ -457,7 +458,7 @@ Untracked files:
         handout.txt
 
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</code></pre>
-<p>We could stage and commit both changes at the same time. However, suppose the two changes are not related. In this case, it’s a good practice to commit the two changes seperately. Stage and commit the change in <code>notes.txt</code> first.</p>
+<p>We could stage and commit both changes at the same time. However, suppose the two changes are not related. In this case, it’s a good practice to commit the two changes separately. Stage and commit the change in <code>notes.txt</code> first.</p>
 <pre class="bash"><code>$ git add notes.txt
 $ git commit -m &quot;added line 2 to notes.txt&quot;
 [master de81fb9] added line 2 to notes.txt
